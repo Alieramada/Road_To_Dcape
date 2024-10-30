@@ -1,3 +1,6 @@
 # Table of contents
 
-* [Page](README.md)
+* [Docker](README.md)
+* [Docker-Compose](docker-compose.md)
+* [Git](git.md)
+* [Gitea](gitea.md)
