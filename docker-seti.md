@@ -26,7 +26,7 @@ docker run --network=my-net -itd --name=container3 busybox
 
 [Обзор сетевых драйверов](https://docs.docker.com/engine/network/drivers/)
 
-### Контейнерные сети <a href="#container-networks" id="container-networks"></a>
+## Контейнерные сети <a href="#container-networks" id="container-networks"></a>
 
 Помимо пользовательских сетей, вы можете напрямую подключить контейнер к сетевому стеку другого контейнера, используя формат `--network container:<name|id>` флага.
 
@@ -82,7 +82,7 @@ docker run -p 127.0.0.1:8080:80 -p '[::1]:8080:80' nginxdocker run -p 127.0.0.1:
 
 Аналогичным образом имя хоста контейнера по умолчанию в Docker — это идентификатор контейнера. Вы можете изменить имя хоста с помощью флага  `--hostname`. При подключении к существующей сети с помощью `docker network connect` вы можете использовать флаг `--alias` для указания дополнительного сетевого псевдонима для контейнера в этой сети.
 
-### DNS <a href="#dns-services" id="dns-services"></a>
+## DNS <a href="#dns-services" id="dns-services"></a>
 
 По умолчанию контейнеры используют те же DNS-серверы, что и хост, но вы можете изменить это с помощью `--dns`.
 
@@ -101,7 +101,7 @@ docker run -p 127.0.0.1:8080:80 -p '[::1]:8080:80' nginxdocker run -p 127.0.0.1:
 
 В вашем контейнере будут строки в `/etc/hosts` , которые определяют имя хоста самого контейнера, а также `localhost` и некоторые другие распространённые параметры. Пользовательские хосты, определённые в `/etc/hosts` на хост-компьютере, не наследуются контейнерами. Чтобы передать дополнительные хосты в контейнер, обратитесь к разделу [добавление записей в файл hosts контейнера](https://docs.docker.com/reference/cli/docker/container/run/#add-host) в справочной документации `docker run` .
 
-### Прокси сервер <a href="#proxy-server" id="proxy-server"></a>
+## Прокси сервер <a href="#proxy-server" id="proxy-server"></a>
 
 ## Настройка прокси-сервера демона
 
@@ -309,7 +309,7 @@ EOF
 }
 ```
 
-### Настройка прокси с помощью командной строки <a href="#set-proxy-using-the-cli" id="set-proxy-using-the-cli"></a>
+## Настройка прокси с помощью командной строки <a href="#set-proxy-using-the-cli" id="set-proxy-using-the-cli"></a>
 
 Вместо настройки клиента вы можете указать конфигурации прокси в командной строке при вызове команд `docker build` и `docker run`.
 
@@ -322,7 +322,7 @@ $ docker run --env HTTP_PROXY="http://proxy.example.com:3128" redis
 
 Список всех аргументов сборки, связанных с прокси-серверами, которые можно использовать с командой `docker build`, см. в разделе [Предопределённые аргументы сборки](https://docs.docker.com/reference/dockerfile/#predefined-args). Эти значения прокси-серверов доступны только в контейнере сборки. Они не включаются в результат сборки.
 
-### [Прокси как переменная среды для сборок](https://docs.docker.com/engine/cli/proxy/#proxy-as-environment-variable-for-builds) <a href="#proxy-as-environment-variable-for-builds" id="proxy-as-environment-variable-for-builds"></a>
+## Прокси как переменная среды для сборки <a href="#proxy-as-environment-variable-for-builds" id="proxy-as-environment-variable-for-builds"></a>
 
 Не используйте инструкцию `ENV` Dockerfile для указания настроек прокси-сервера при сборке. Вместо этого используйте аргументы сборки.
 
