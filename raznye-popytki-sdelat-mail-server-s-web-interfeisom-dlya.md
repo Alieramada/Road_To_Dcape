@@ -109,3 +109,7 @@ ROUNDCUBEMAIL_UPLOAD_MAX_FILESIZE: 5000M
 
 Удалось подцепить файлы с письмами
 
+**Почитать про плагины rouncube**
+
+**Попробовать в dcape**
+
