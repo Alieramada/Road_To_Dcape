@@ -95,5 +95,17 @@ ROUNDCUBEMAIL_UPLOAD_MAX_FILESIZE: 5000M
 
 Почему-то не импортируются файлы с почтой (в mailu  с roundcube отрабатывает)
 
+Список плагинов в mailu попробовать установить
+
+`ROUNDCUBE_PLUGINS` is not set the following plugins are enabled by default:
+
+* archive
+* carddav
+* enigma
+* mailu
+* managesieve
+* markasjunk
+* zipdownload
+
 
 
