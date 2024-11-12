@@ -59,3 +59,30 @@ make up
 
 <mark style="color:red;">make: \*\*\* Нет правила для сборки цели «init». Останов</mark>
 
+```
+make install DCAPE_DOMAIN=your_server.ltd
+```
+
+```
+Dcape URL: http://your_server.ltd
+------------------------------------------
+NAME                 IMAGE                                          COMMAND                  SERVICE      CREATED                  STATUS                             PORTS
+dcape-auth-1         ghcr.io/dopos/narra:v0.26.3                    "/app --as.host http…"   auth         45 seconds ago           Up 45 seconds                      8080/tcp
+dcape-cicd-1         woodpeckerci/woodpecker-server:v2.0.0-alpine   "/bin/woodpecker-ser…"   cicd         30 seconds ago           Up 29 seconds (health: starting)   80/tcp, 443/tcp, 8000/tcp, 9000/tcp
+dcape-cicd-agent-1   woodpeckerci/woodpecker-agent:v2.0.0-alpine    "/bin/woodpecker-age…"   cicd-agent   30 seconds ago           Up 30 seconds (health: starting)   3000/tcp
+dcape-config-1       ghcr.io/apisite/app-enfist:v0.6.12             "/usr/bin/apisite --…"   config       38 seconds ago           Up 37 seconds                      8080/tcp
+dcape-db-1           postgres:15.2                                  "docker-entrypoint.s…"   db           About a minute ago       Up About a minute (healthy)        127.0.0.1:5433->5432/tcp
+dcape-manager-1      portainer/portainer-ce:2.19.4-alpine           "/portainer"             manager      Less than a second ago   Up Less than a second              8000/tcp, 9000/tcp, 9443/tcp
+dcape-router-1       traefik:2.11.3                                 "/entrypoint.sh trae…"   router       About a minute ago       Up About a minute                  0.0.0.0:80->80/tcp, :::80->80/tcp, 0.0.0.0:443->443/tcp, :::443->443/tcp
+dcape-vcs-1          gitea/gitea:1.21.2                             "/usr/bin/entrypoint…"   vcs          56 seconds ago           Up 55 seconds (healthy)            3000/tcp, 0.0.0.0:10022->22/tcp, :::10022->22/tcp
+2024-11-12 15:50:51+03:00 ======================================== Dcape install done
+
+```
+
+Узнаем пароль от getea командой&#x20;
+
+`make echo-gitea-admin-pass`
+
+переходим по адресу http://git.your\_server.ltd
+
+Логин dcapeadmin&#x20;
