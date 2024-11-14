@@ -26,8 +26,35 @@ Dcape разворачивается и используется на локал
 Т.к. сервисы **dcape** общаются между собой, их hostname нельзя привязать к `loopback`- интерфейсу. В качестве ip-адреса можно использовать шлюз подсети dcape, которая задается параметром `DCAPE_SUBNET` (по умолчанию, подсеть - 100.127.0.0/24 и шлюз - 100.127.0.1):
 
 ```bash
-grep -q " dev.lan" /etc/hosts || \
-sudo bash -c 'for n in "" git drone port ns ; do [ "$n" ] && n="$n." ; echo "100.127.0.1 ${n}dev.lan" >> /etc/hosts ; done'
+grep -q " your_server.ltd" /etc/hosts || \
+sudo bash -c 'for n in "" git drone port ns ; do [ "$n" ] && n="$n." ; echo "100.127.0.1 ${n}your_server.ltd" >> /etc/hosts ; done'
+
+```
+
+<mark style="color:red;">В v3 cicd (woodpcaker) >> drone</mark>
+
+```bash
+grep -q " your_server.ltd" /etc/hosts || \
+sudo bash -c 'for n in "" git cicd port ns ; do [ "$n" ] && n="$n." ; echo "100.127.0.1 ${n}your_server.ltd" >> /etc/hosts ; done'
+```
+
+```bash
+cat /etc/hosts
+127.0.0.1	localhost
+127.0.1.1	your_server.ltd
+
+# The following lines are desirable for IPv6 capable hosts
+::1     ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+100.127.0.1 your_server.ltd
+100.127.0.1 git.your_server.ltd
+#100.127.0.1 drone.conf.sao.ru
+100.127.0.1 port.your_server.ltd
+100.127.0.1 ns.your_server.ltd
+100.127.0.1 cicd.your_server.ltd #!!
 
 ```
 
@@ -86,3 +113,4 @@ dcape-vcs-1          gitea/gitea:1.21.2                             "/usr/bin/en
 переходим по адресу http://git.your\_server.ltd
 
 Логин dcapeadmin&#x20;
+
