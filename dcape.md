@@ -116,7 +116,66 @@ Ifпереходим по адресу http://git.your\_server.ltd
 
 Убеждаемся что есть токен для cdci
 
-<figure><img src=".gitbook/assets/Снимок экрана от 2024-11-20 10-53-22.png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/Снимок экрана от 2024-11-20 10-53-22.png" alt=""><figcaption><p> </p></figcaption></figure>
 
-Для тестов&#x20;
+## Попытка деплоя приложений gitea+cicd
+
+Для тестов взял пару адаптированных под dcape приложений:  [dcape-app-nginx-sample](https://github.com/dopos/dcape-app-nginx-sample), и, поскольку одна из ближаших задач настроить связку почтовый сервер + веб доступ к нему для пользователей - [dcape-app-mailserver](https://github.com/dopos/dcape-app-mailserver).
+
+Клонируем репозетории в gitea:
+
+<figure><img src=".gitbook/assets/Снимок экрана от 2024-11-20 16-44-50 (1).png" alt=""><figcaption></figcaption></figure>
+
+Активируем репозиторий в cicd:
+
+<figure><img src=".gitbook/assets/Снимок экрана от 2024-11-20 16-48-02.png" alt=""><figcaption></figcaption></figure>
+
+Пробуем запустить и получаем ошибку
+
+<figure><img src=".gitbook/assets/изображение.png" alt=""><figcaption></figcaption></figure>
+
+Нужно сделать доверенным
+
+
+
+<figure><img src=".gitbook/assets/Снимок экрана от 2024-11-20 17-05-13 (1).png" alt=""><figcaption></figcaption></figure>
+
+Пробуем перезапустить&#x20;
+
+Получаем дроугую ошибку:
+
+```
+g --global --replace-all safe.directory /woodpecker/src/git.conf.sao.ru/dcapeadmin/dcape-app-mailserver
+git remote add origin http://git.conf.sao.ru/dcapeadmin/dcape-app-mailserver.git
+git fetch --no-tags --depth=1 --filter=tree:0 origin +cc5d021e362cec3e34fe34a36e2988931f90225c: fatal: unable to access 'http://git.conf.sao.ru/dcapeadmin/dcape-app-mailserver.git/': Could not resolve host: git.server.ltd exit status 128
+```
+
+```
+Could not resolve host: git.server.ltd
+```
+
+<mark style="background-color:green;">Проверили резолвинг из контейнеров агента  и серверной части woodpecker.  git  резолвится, куда дальше копать не очень понятно. Что-то связаное с плагином woodpeckerа?</mark>
+
+hint
+
+## Попытка рвзвернуть приложение локально.
+
+```
+git clone https://github.com/dopos/dcape-app-mailserver.git
+cd dcape-app-mailserver
+make config-if
+```
+
+Получаем ошибку:
+
+```
+/opt/dcape/Makefile.app:58: /Makefile.common: Нет такого файла или каталога
+make: *** Нет правила для сборки цели «/Makefile.common».  Останов.
+
+```
+
+```
+cat -n Makefile.app 
+ 58	include $(DCAPE_ROOT)/Makefile.common
+```
 
