@@ -145,9 +145,9 @@ Ifпереходим по адресу http://git.your\_server.ltd
 Получаем дроугую ошибку:
 
 ```
-g --global --replace-all safe.directory /woodpecker/src/git.conf.sao.ru/dcapeadmin/dcape-app-mailserver
-git remote add origin http://git.conf.sao.ru/dcapeadmin/dcape-app-mailserver.git
-git fetch --no-tags --depth=1 --filter=tree:0 origin +cc5d021e362cec3e34fe34a36e2988931f90225c: fatal: unable to access 'http://git.conf.sao.ru/dcapeadmin/dcape-app-mailserver.git/': Could not resolve host: git.server.ltd exit status 128
+g --global --replace-all safe.directory /woodpecker/src/git.server.ltd/dcapeadmin/dcape-app-mailserver
+git remote add origin http://git.server.ltd/dcapeadmin/dcape-app-mailserver.git
+git fetch --no-tags --depth=1 --filter=tree:0 origin +cc5d021e362cec3e34fe34a36e2988931f90225c: fatal: unable to access 'http://git.server.ltd/dcapeadmin/dcape-app-mailserver.git/': Could not resolve host: git.server.ltd exit status 128
 ```
 
 ```
@@ -155,8 +155,6 @@ Could not resolve host: git.server.ltd
 ```
 
 <mark style="background-color:green;">Проверили резолвинг из контейнеров агента  и серверной части woodpecker.  git  резолвится, куда дальше копать не очень понятно. Что-то связаное с плагином woodpeckerа?</mark>
-
-hint
 
 ## Попытка рвзвернуть приложение локально.
 
