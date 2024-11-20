@@ -76,7 +76,7 @@ cd dcape
 * завершения установки gitea
 * создания API TOKEN
 
-**Шаг 1. Подготовка к запуску gitea**
+**Подготовка к запуску gitea**
 
 ```bash
 make init DCAPE_DOMAIN=your_server.ltd
@@ -110,7 +110,13 @@ dcape-vcs-1          gitea/gitea:1.21.2                             "/usr/bin/en
 
 `make echo-gitea-admin-pass`
 
-переходим по адресу http://git.your\_server.ltd
+Ifпереходим по адресу http://git.your\_server.ltd
 
 Логин dcapeadmin&#x20;
+
+Убеждаемся что есть токен для cdci
+
+<figure><img src=".gitbook/assets/Снимок экрана от 2024-11-20 10-53-22.png" alt=""><figcaption></figcaption></figure>
+
+Для тестов&#x20;
 
