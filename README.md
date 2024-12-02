@@ -195,10 +195,10 @@ VOLUME /my_volume
 \
 
 
-![](https://habrastorage.org/r/w1560/getpro/habr/post\_images/29c/1ea/9a4/29c1ea9a4546930dd8d03c7c5f521cc8.png)
+![](https://habrastorage.org/r/w1560/getpro/habr/post_images/29c/1ea/9a4/29c1ea9a4546930dd8d03c7c5f521cc8.png)
 
 \
-_Монтирование tmpfs и bind mount_\
+&#xNAN;_&#x41C;онтирование tmpfs и bind mount_\
 \
 Минусы использования технологии bind mount заключаются в том, что её использование усложняет резервное копирование данных, миграцию данных, совместное использование данных несколькими контейнерами. Гораздо лучше для постоянного хранения данных использовать тома Docker.
 

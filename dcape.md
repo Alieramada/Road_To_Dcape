@@ -156,7 +156,77 @@ Could not resolve host: git.server.ltd
 
 <mark style="background-color:green;">Проверили резолвинг из контейнеров агента  и серверной части woodpecker.  git  резолвится, куда дальше копать не очень понятно. Что-то связаное с плагином woodpeckerа?</mark>
 
-## Попытка рвзвернуть приложение локально.
+
+
+Было замечено, что почему-то при установке поставился Woodpecker версии 2.0.0\\
+
+Отредактировали .env файл.
+
+Подтянулась актуальная версия, но при этом слетел Client ID ![](<.gitbook/assets/Снимок экрана от 2024-11-26 12-44-27 (2).png>)
+
+
+
+Пришлось регестрировать заново и прописывать в .env
+
+<figure><img src=".gitbook/assets/Снимок экрана от 2024-11-26 12-45-24.png" alt=""><figcaption></figcaption></figure>
+
+<figure><img src=".gitbook/assets/Снимок экрана от 2024-11-26 13-01-08.png" alt=""><figcaption></figcaption></figure>
+
+При этом простой reup контейнеров не сработал
+
+Делали чистку кэша docker и пересоздание .env (make config-force) и что-то из этого помогло.
+
+<figure><img src=".gitbook/assets/Снимок экрана от 2024-11-26 13-35-39.png" alt=""><figcaption></figcaption></figure>
+
+Так же выяснили, что после клонирования репозетория следующий шаг делали неверно
+
+Нашли расположение test delivery в gitea:
+
+1\) Выбираем репозиторий
+
+2\) Переходим в настройки&#x20;
+
+![](<.gitbook/assets/Снимок экрана от 2024-12-02 15-53-49 (1).png>)
+
+3\) Вебхуки
+
+![](<.gitbook/assets/Снимок экрана от 2024-12-02 15-55-40.png>)
+
+4\) Нажимаем на созданный вебхук, проматываем в самый низ и жмём кнопку.
+
+<figure><img src=".gitbook/assets/Снимок экрана от 2024-12-02 15-55-40 (1).png" alt=""><figcaption></figcaption></figure>
+
+Также после авторизации в gitea стоит зайти по адресу
+
+yourserver.ltd/private&#x20;
+
+Там очень удобно отслеживать информацию по .env файлам, traefik, ect.
+
+<figure><img src=".gitbook/assets/Снимок экрана от 2024-12-02 16-06-03.png" alt=""><figcaption></figcaption></figure>
+
+<figure><img src=".gitbook/assets/Снимок экрана от 2024-12-02 16-08-24.png" alt=""><figcaption></figcaption></figure>
+
+К сожалению обновление woodpecker не помогло.
+
+Сохраняется ошибка при попытке поднять приложение
+
+```
++ git init --object-format sha1 -b master
+Initialized empty Git repository in /woodpecker/src/git.yourserver.ltd/dcapeadmin/dcape-app-mailserver/.git/
++ git config --global --replace-all safe.directory /woodpecker/src/git.yourserver.ltd/dcapeadmin/dcape-app-mailserver
++ git remote add origin http://git.yourserver.ltd/dcapeadmin/dcape-app-mailserver.git
++ git fetch --no-tags --depth=1 --filter=tree:0 origin +7660bce28bb0c5a8b96b961ccdbc3e7d3dd65b3c:
+fatal: unable to access 'http://git.yourserver.ltd/dcapeadmin/dcape-app-mailserver.git/': Could not resolve host: git.yourserver.ltd
+exit status 128
+```
+
+Шаблон в enfist не создаётся
+
+<figure><img src=".gitbook/assets/Снимок экрана от 2024-12-02 16-14-52.png" alt=""><figcaption></figcaption></figure>
+
+
+
+## Попытка развернуть локаольно
 
 ```
 git clone https://github.com/dopos/dcape-app-mailserver.git
@@ -177,3 +247,14 @@ cat -n Makefile.app
  58	include $(DCAPE_ROOT)/Makefile.common
 ```
 
+Ещё ошибка:
+
+```
+Error: No such object: dcape-compose
+Error: No such object: dcape-compose
+Error: No such object: dcape-compose
+/opt/dcape/Makefile.app:58: /Makefile.common: Нет такого файла или каталога
+make: *** Нет правила для сборки цели «/Makefile.common».  Останов.
+```
+
+<mark style="background-color:red;">dcape-compose??</mark>
