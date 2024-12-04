@@ -224,7 +224,48 @@ exit status 128
 
 <figure><img src=".gitbook/assets/Снимок экрана от 2024-12-02 16-14-52.png" alt=""><figcaption></figcaption></figure>
 
+Проблема с доставкой в одном случае и с аунтификацией в cicd и narra в другом случае была связана с тем как docker разрешает имена (docker dns-resolver). В нашем случае он обращался к публичным dns. Мы установили на наш сервер dnsmasq,  и минимально его настроили:
 
+vi dnsmasq.conf  и добавили:
+
+```
+no-resolv 
+server=ip_of_public_dns
+bind-interfaces
+```
+
+Затем в /etc/docker/daemon.json прописали, чтобы docker обращался к нашему local dns:
+
+```
+{
+    "dns": ["server.ltd"]
+}
+```
+
+После этого аунтификация и доставка корректно заработали.
+
+В wodpecker:
+
+```bash
++ git init --object-format sha1 -b v3
+Initialized empty Git repository in /woodpecker/src/git.server.ltd/dcapeadmin/hq/.git/
++ git config --global --replace-all safe.directory /woodpecker/src/git.server.ltd/dcapeadmin/hq
++ git remote add origin http://git.server.ltd/dcapeadmin/hq.git
++ git fetch --no-tags --depth=1 --filter=tree:0 origin +855478e0907ad39fe23135d33487f6eb1f9810aa:
+From http://git.server.ltd/dcapeadmin/hq
+ * branch            855478e0907ad39fe23135d33487f6eb1f9810aa -> FETCH_HEAD
++ git reset --hard -q 855478e0907ad39fe23135d33487f6eb1f9810aa
++ git submodule update --init --recursive --depth=1 --recommend-shallow
+
+```
+
+Однако на стадии deploy возникает новая ошибка:&#x20;
+
+```
+Error response from daemon: pull access denied for dcape-compose, repository does not exist or may require 'docker login': denied: requested access to the resource is denied
+```
+
+В EnFiSt шаблон не появляется.
 
 ## Попытка развернуть локаольно
 
