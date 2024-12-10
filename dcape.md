@@ -118,7 +118,7 @@ Ifпереходим по адресу http://git.your\_server.ltd
 
 <figure><img src=".gitbook/assets/Снимок экрана от 2024-11-20 10-53-22.png" alt=""><figcaption><p> </p></figcaption></figure>
 
-## Попытка деплоя приложений gitea+cicd
+## Попытка деплоя приложений gitea+cicd+enfist
 
 Для тестов взял пару адаптированных под dcape приложений:  [dcape-app-nginx-sample](https://github.com/dopos/dcape-app-nginx-sample), и, поскольку одна из ближаших задач настроить связку почтовый сервер + веб доступ к нему для пользователей - [dcape-app-mailserver](https://github.com/dopos/dcape-app-mailserver).
 
@@ -267,7 +267,7 @@ Error response from daemon: pull access denied for dcape-compose, repository doe
 
 В EnFiSt шаблон не появляется.
 
-## Попытка развернуть локаольно
+## Попытка развернуть локально
 
 ```
 git clone https://github.com/dopos/dcape-app-mailserver.git
@@ -299,3 +299,143 @@ make: *** Нет правила для сборки цели «/Makefile.common�
 ```
 
 <mark style="background-color:red;">dcape-compose??</mark>
+
+## Успешный деплой приложений через gitea+cicd+enfist
+
+`Нужно перейти cd /opt/dcape` и выполнить команду `make build-compose`&#x20;
+
+После этого, для адаптированных под dcape приложений, в gitea повторяем пункт "Test Delivery".
+
+В woodpecker  получаем сообщение, что создан шаблон в enfist:
+
+<figure><img src=".gitbook/assets/Снимок экрана от 2024-12-10 15-34-24.png" alt=""><figcaption></figcaption></figure>
+
+Переходим в enifst и убеждаемся в существовании этого шаблона.
+
+<figure><img src=".gitbook/assets/Снимок экрана от 2024-12-10 15-40-13 (1).png" alt=""><figcaption><p>В</p></figcaption></figure>
+
+Вносим необходимые параметры и удаляем суфикс .sample
+
+Возращаемся в gitea и пытаемся повторить отправку.
+
+Если всё было сделано верно, то наблюдаем в woodpecker такую картину:
+
+<figure><img src=".gitbook/assets/Снимок экрана от 2024-12-10 15-45-52.png" alt=""><figcaption></figcaption></figure>
+
+Адаптированное прилоджение успешно развёрнуто.
+
+## Успешный деплой адаптированных приложений "ручками"
+
+Клонируем интересующий нас репозиторий, переходим в его дерикторию, выполняем команду make config, чтобы получить шаблон окружения
+
+```
+git clone https://github.com/dopos/dcape-app-mailserver.git
+cd dcape-app-mailserver
+make config
+```
+
+Редактируем появившийся  .env.sample и убираем суффикс.
+
+Выполняем&#x20;
+
+`make up`
+
+Если всё было сделано верно, то приложение успешно развёрнуто.
+
+## Адаптация собственных приложений под Dcape
+
+Для успешной адаптации нужно написать Makefile
+
+Шаблон:
+
+```
+# ------------------------------------------------------------------------------
+# Find and include DCAPE_ROOT/Makefile
+DCAPE_COMPOSE   ?= dcape-compose
+DCAPE_ROOT      ?= $(shell docker inspect -f "{{.Config.Labels.dcape_root}}" $(DCAPE_COMPOSE))
+
+ifeq ($(shell test -e $(DCAPE_ROOT)/Makefile.app && echo -n yes),yes)
+  include $(DCAPE_ROOT)/Makefile.app
+else
+  include /opt/dcape/Makefile.app
+endif
+```
+
+И интегрировать с traefik и woodpecker:
+
+### Интеграция с traefik <a href="#integraciya-s-traefik" id="integraciya-s-traefik"></a>
+
+Производится с помощью меток контейнера.
+
+#### Пример docker-compose.yml <a href="#primer-docker-composeyml" id="primer-docker-composeyml"></a>
+
+| <pre class="language-docker-compose.yml"><code class="lang-docker-compose.yml"># custom app config
+# overrides DCAPE/apps/cicd/dcape-app/docker-compose.yml
+
+version: '3'
+
+services:
+  app:
+    environment:
+      - VAR=value
+    volumes:
+      - ${APP_ROOT}/html:/usr/share/nginx/html:ro
+</code></pre> |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+
+### Интеграция с woodpecker <a href="#integraciya-s-woodpecker" id="integraciya-s-woodpecker"></a>
+
+Производится с помощью файла `.woodpecker.yml`, который размещается в корне репозитория.
+
+#### Примеры: <a href="#primer-droneyml" id="primer-droneyml"></a>
+
+```.drone.yml
+---
+kind: pipeline
+type: docker
+name: app
+
+steps:
+
+- name: deploy_local
+  pull: never
+  image: ${DCAPE_COMPOSE}
+  commands:
+  - . setup config
+  - make .drone-default
+  volumes:
+  - name: dockersock
+    path: /var/run/docker.sock
+
+volumes:
+- name: dockersock
+  host:
+    path: /var/run/docker.sock/
+```
+
+```
+# lint this file:
+#   go get github.com/woodpecker-ci/woodpecker/cmd/cli
+#   cli lint .woodpecker.yml
+
+variables:
+    - &dcape_img 'dcape-compose'
+
+clone:
+  git:
+    image: woodpeckerci/plugin-git
+    settings:
+      lfs: false
+      tags: false
+
+steps:
+  deploy:
+    image: *dcape_img
+    commands:
+      - make .default-deploy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+```
+
+## Попытка адаптировать roundcube/roundcubemail
+
